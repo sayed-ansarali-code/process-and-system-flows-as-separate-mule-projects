@@ -1,0 +1,13 @@
+#%RAML 0.8
+title: ApiLedConnectivityExample
+version: 1.0
+baseUri: http://localhost:8081/api
+
+/get-employee-data-sys:
+    get:
+        description: System API to get data from DB
+        responses:
+            200:
+                body:
+                    text/plain:
+                        example: a,b,c

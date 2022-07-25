@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="8773460f-6e4c-4fc2-bef8-183af32a6401" basePath="/api" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<flow name="get-employee-data-prcFlow" doc:id="f22fab7e-4b20-435e-8036-e892b671f650" >
+		<http:request method="GET" doc:name="Request" doc:id="116b4210-ea5d-45d9-9c26-08dba7474bb5" config-ref="HTTP_Request_configuration" path="/get-employee-data-sys"/>
+		<ee:transform doc:name="Transform Message" doc:id="daefaac8-5f74-4b8f-89a7-15f8f1cbae33" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+input payload application/java
+output application/csv separator=","
+---
+payload map {
+  PERSONID: $.PERSONID,
+  FULLNAME: $.FIRSTNAME ++ " " ++ $.LASTNAME
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

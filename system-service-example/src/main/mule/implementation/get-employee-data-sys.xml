@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="get-employee-data-sysFlow" doc:id="d106f7d5-a9a5-44bb-941c-c4443bbdd674" >
+		<db:select doc:id="0939c1c6-faf4-4b9c-9c7a-e52a3751d5e9" config-ref="oracle_config1" doc:name="Select" >
+			<db:sql ><![CDATA[select * from person]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="43de4a08-0be3-42c3-8262-6c2c06a703bd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+input payload application/java
+output application/csv separator=","
+---
+payload map {
+  PERSONID: $.PERSONID,
+  FIRSTNAME: $.FIRSTNAME,
+  LASTNAME: $.LASTNAME
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
