@@ -13,6 +13,10 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
     <http:listener-config name="process-service-example-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8080" />
     </http:listener-config>
-    <apikit:config name="process-service-example-config" api="process-service-example.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-	
+    <apikit:config name="process-service-example-config" api="process-service-example.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" parser="RAML">
+		<apikit:flow-mappings >
+			<apikit:flow-mapping resource="/get-employee-data-prc.csv" action="get" flow-ref="get-employee-data-prcFlow" />
+		</apikit:flow-mappings>
+	</apikit:config>
+
 </mule>
